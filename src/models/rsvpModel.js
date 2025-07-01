@@ -22,11 +22,13 @@ const rsvpValidationSchema = Joi.object({
 
   // Menú del invitado principal
   menu: Joi.string()
-    .valid('pollo', 'pasta', 'vegetariano', 'pescado')
+    .min(2)
+    .max(50)
     .required()
     .messages({
-      'any.only': 'Debes seleccionar un menú válido',
-      'string.empty': 'La selección de menú es requerida'
+      'string.empty': 'La selección de menú es requerida',
+      'string.min': 'El menú debe tener al menos 2 caracteres',
+      'string.max': 'El menú no puede exceder 50 caracteres'
     }),
 
   // Opciones booleanas
@@ -45,10 +47,13 @@ const rsvpValidationSchema = Joi.object({
           'string.min': 'El nombre del acompañante debe tener al menos 2 caracteres'
         }),
       platillo: Joi.string()
-        .valid('pollo', 'pasta', 'vegetariano', 'pescado')
+        .min(2)
+        .max(50)
         .required()
         .messages({
-          'any.only': 'Debes seleccionar un platillo válido para el acompañante'
+          'string.empty': 'El platillo del acompañante es requerido',
+          'string.min': 'El platillo debe tener al menos 2 caracteres',
+          'string.max': 'El platillo no puede exceder 50 caracteres'
         })
     })
   ).default([]),

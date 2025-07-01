@@ -40,12 +40,12 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${config.port}`,
-        description: 'Desarrollo Local'
+        url: 'http://187.157.236.135:4000',
+        description: 'Servidor de Pruebas (Principal)'
       },
       {
-        url: 'http://187.157.236.135:4000',
-        description: 'Producción'
+        url: `http://localhost:${config.port}`,
+        description: 'Desarrollo Local'
       },
       {
         url: 'https://api.rebecayenrique.com',
@@ -93,8 +93,9 @@ const options = {
             },
             menu: {
               type: 'string',
-              enum: ['pollo', 'pasta', 'vegetariano', 'pescado'],
-              description: 'Opción de menú seleccionada',
+              minLength: 2,
+              maxLength: 50,
+              description: 'Opción de menú seleccionada (ej: pollo, pasta, vegetariano, pescado, salmón, caldo, etc.)',
               example: 'pollo'
             },
             agregarAcompañantes: {
@@ -118,7 +119,7 @@ const options = {
               example: [
                 {
                   nombre: 'Juan Carlos González',
-                  platillo: 'pasta'
+                  platillo: 'salmón'
                 },
                 {
                   nombre: 'Ana María López',
@@ -147,8 +148,9 @@ const options = {
             },
             platillo: {
               type: 'string',
-              enum: ['pollo', 'pasta', 'vegetariano', 'pescado'],
-              description: 'Opción de menú para el acompañante',
+              minLength: 2,
+              maxLength: 50,
+              description: 'Opción de menú para el acompañante (ej: pollo, pasta, vegetariano, pescado, salmón, caldo, etc.)',
               example: 'pasta'
             }
           }
