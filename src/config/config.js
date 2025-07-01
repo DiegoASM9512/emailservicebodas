@@ -9,9 +9,11 @@ const config = {
     senderName: process.env.SENDER_NAME || 'Rebeca y Enrique - Nuestra Boda'
   },
   cors: {
-    allowedOrigins: process.env.ALLOWED_ORIGINS ? 
-      process.env.ALLOWED_ORIGINS.split(',') : 
-      ['http://localhost:3000', 'http://localhost:5173']
+    allowedOrigins: process.env.ALLOWED_ORIGINS === '*' ? 
+      '*' : 
+      (process.env.ALLOWED_ORIGINS ? 
+        process.env.ALLOWED_ORIGINS.split(',') : 
+        ['http://localhost:3000', 'http://localhost:5173'])
   },
   rateLimit: {
     maxRequestsPerMinute: parseInt(process.env.MAX_REQUESTS_PER_MINUTE) || 10
