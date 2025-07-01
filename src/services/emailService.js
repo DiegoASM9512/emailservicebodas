@@ -23,11 +23,16 @@ class EmailService {
       emailRemitente 
     } = rsvpData;
 
-    const menuLabels = {
-      pollo: 'Pollo en salsa especial',
-      pasta: 'Pasta italiana',
-      vegetariano: 'Opción vegetariana',
-      pescado: 'Pescado a la plancha'
+    // Debug: Log de los datos recibidos en el servicio
+    console.log('🍽️ Datos del menú recibidos en servicio:', { menu, acompañantes });
+
+    // Función para formatear nombres de platillos
+    const formatearPlatillo = (platillo) => {
+      if (!platillo) return 'No especificado';
+      // Capitalizar primera letra de cada palabra
+      return platillo.split(' ').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      ).join(' ');
     };
 
     const acompañantesHTML = acompañantes.length > 0 ? `
@@ -36,7 +41,7 @@ class EmailService {
         ${acompañantes.map((acomp, index) => `
           <div style="margin-bottom: 10px; padding: 10px; background-color: white; border-radius: 4px;">
             <strong>${index + 1}. ${acomp.nombre}</strong><br>
-            <span style="color: #666;">Platillo: ${menuLabels[acomp.platillo]}</span>
+            <span style="color: #666;">Platillo: ${formatearPlatillo(acomp.platillo)}</span>
           </div>
         `).join('')}
       </div>
@@ -78,7 +83,7 @@ class EmailService {
             <p><strong>👤 Invitado principal:</strong> ${nombre}</p>
             <p><strong>📧 Email:</strong> ${emailRemitente}</p>
             <p><strong>👥 Número de acompañantes:</strong> ${numeroAcompañantes}</p>
-            <p><strong>🍽️ Menú seleccionado:</strong> ${menuLabels[menu]}</p>
+            <p><strong>🍽️ Menú seleccionado:</strong> ${formatearPlatillo(menu)}</p>
           </div>
 
           ${acompañantesHTML}
@@ -194,11 +199,12 @@ class EmailService {
   generatePlainTextConfirmation(rsvpData) {
     const { nombre, numeroAcompañantes, menu, acompañantes, alergias, emailRemitente } = rsvpData;
     
-    const menuLabels = {
-      pollo: 'Pollo en salsa especial',
-      pasta: 'Pasta italiana',
-      vegetariano: 'Opción vegetariana',
-      pescado: 'Pescado a la plancha'
+    // Función para formatear nombres de platillos
+    const formatearPlatillo = (platillo) => {
+      if (!platillo) return 'No especificado';
+      return platillo.split(' ').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      ).join(' ');
     };
 
     let text = `
@@ -212,13 +218,13 @@ DETALLES DE TU CONFIRMACIÓN:
 - Invitado principal: ${nombre}
 - Email: ${emailRemitente}
 - Número de acompañantes: ${numeroAcompañantes}
-- Menú seleccionado: ${menuLabels[menu]}
+- Menú seleccionado: ${formatearPlatillo(menu)}
 `;
 
     if (acompañantes.length > 0) {
       text += '\nACOMPAÑANTES:\n';
       acompañantes.forEach((acomp, index) => {
-        text += `${index + 1}. ${acomp.nombre} - ${menuLabels[acomp.platillo]}\n`;
+        text += `${index + 1}. ${acomp.nombre} - ${formatearPlatillo(acomp.platillo)}\n`;
       });
     }
 
@@ -257,11 +263,12 @@ Rebeca y Enrique
       emailRemitente 
     } = rsvpData;
 
-    const menuLabels = {
-      pollo: 'Pollo en salsa especial',
-      pasta: 'Pasta italiana',
-      vegetariano: 'Opción vegetariana',
-      pescado: 'Pescado a la plancha'
+    // Función para formatear nombres de platillos
+    const formatearPlatillo = (platillo) => {
+      if (!platillo) return 'No especificado';
+      return platillo.split(' ').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      ).join(' ');
     };
 
     const acompañantesHTML = acompañantes.length > 0 ? `
@@ -270,7 +277,7 @@ Rebeca y Enrique
         ${acompañantes.map((acomp, index) => `
           <div style="margin-bottom: 8px; padding: 8px; background-color: white; border-radius: 4px; border-left: 3px solid #D4AF37;">
             <strong>${index + 1}. ${acomp.nombre}</strong><br>
-            <span style="color: #666; font-size: 0.9em;">🍽️ ${menuLabels[acomp.platillo]}</span>
+            <span style="color: #666; font-size: 0.9em;">🍽️ ${formatearPlatillo(acomp.platillo)}</span>
           </div>
         `).join('')}
       </div>
@@ -313,7 +320,7 @@ Rebeca y Enrique
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
             <div>
               <p style="margin: 5px 0;"><strong>📧 Email:</strong><br><span style="color: #666;">${emailRemitente}</span></p>
-              <p style="margin: 5px 0;"><strong>🍽️ Menú principal:</strong><br><span style="color: #666;">${menuLabels[menu]}</span></p>
+              <p style="margin: 5px 0;"><strong>🍽️ Menú principal:</strong><br><span style="color: #666;">${formatearPlatillo(menu)}</span></p>
             </div>
             <div>
               <p style="margin: 5px 0;"><strong>👥 Acompañantes:</strong><br><span style="color: #666;">${numeroAcompañantes}</span></p>
@@ -331,9 +338,9 @@ Rebeca y Enrique
           <div style="margin: 20px 0;">
             <h4 style="color: #8B4513; margin-bottom: 10px;">🍽️ Resumen de Menús:</h4>
             <div style="background-color: #f8f9fa; padding: 15px; border-radius: 6px;">
-              <p style="margin: 5px 0;"><strong>${nombre}:</strong> ${menuLabels[menu]}</p>
+              <p style="margin: 5px 0;"><strong>${nombre}:</strong> ${formatearPlatillo(menu)}</p>
               ${acompañantes.map(acomp => `
-                <p style="margin: 5px 0;"><strong>${acomp.nombre}:</strong> ${menuLabels[acomp.platillo]}</p>
+                <p style="margin: 5px 0;"><strong>${acomp.nombre}:</strong> ${formatearPlatillo(acomp.platillo)}</p>
               `).join('')}
             </div>
           </div>
@@ -373,11 +380,12 @@ Rebeca y Enrique
   generateCoupleNotificationText(rsvpData) {
     const { nombre, numeroAcompañantes, menu, acompañantes, alergias, emailRemitente } = rsvpData;
     
-    const menuLabels = {
-      pollo: 'Pollo en salsa especial',
-      pasta: 'Pasta italiana', 
-      vegetariano: 'Opción vegetariana',
-      pescado: 'Pescado a la plancha'
+    // Función para formatear nombres de platillos
+    const formatearPlatillo = (platillo) => {
+      if (!platillo) return 'No especificado';
+      return platillo.split(' ').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      ).join(' ');
     };
 
     const totalPersonas = parseInt(numeroAcompañantes) + 1;
@@ -395,13 +403,13 @@ FECHA/HORA: ${new Date().toLocaleString('es-ES')}
 ===============================================
 
 DETALLES DE MENÚS:
-- ${nombre}: ${menuLabels[menu]}
+- ${nombre}: ${formatearPlatillo(menu)}
 `;
 
     if (acompañantes.length > 0) {
       text += '\nACOMPAÑANTES:\n';
       acompañantes.forEach((acomp, index) => {
-        text += `${index + 1}. ${acomp.nombre}: ${menuLabels[acomp.platillo]}\n`;
+        text += `${index + 1}. ${acomp.nombre}: ${formatearPlatillo(acomp.platillo)}\n`;
       });
     } else {
       text += '\nACOMPAÑANTES: Ninguno\n';

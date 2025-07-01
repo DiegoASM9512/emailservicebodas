@@ -8,8 +8,14 @@ class EmailController {
    */
   async sendRsvpConfirmation(req, res) {
     try {
+      // Debug: Log de los datos recibidos
+      console.log('📥 Datos recibidos en el controlador:', JSON.stringify(req.body, null, 2));
+      
       // Validar datos de entrada
       const { isValid, errors, data } = validateRsvpData(req.body);
+      
+      // Debug: Log del resultado de validación
+      console.log('✅ Resultado de validación:', { isValid, errors, data: data ? JSON.stringify(data, null, 2) : null });
       
       if (!isValid) {
         return res.status(400).json(

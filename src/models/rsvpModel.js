@@ -79,9 +79,19 @@ const rsvpValidationSchema = Joi.object({
 
 // Validación personalizada
 const validateRsvpData = (data) => {
+  // Debug: Log de los datos antes de validación
+  console.log('🔍 Datos antes de validación Joi:', JSON.stringify(data, null, 2));
+  
   const { error, value } = rsvpValidationSchema.validate(data, {
     abortEarly: false,
     stripUnknown: true
+  });
+
+  // Debug: Log después de validación Joi
+  console.log('📋 Resultado Joi:', { 
+    hasError: !!error, 
+    value: JSON.stringify(value, null, 2),
+    errorDetails: error ? error.details.map(d => d.message) : null 
   });
 
   if (error) {
