@@ -13,14 +13,32 @@ const notFoundHandler = require('./middleware/notFoundHandler');
 const app = express();
 
 // Middleware de seguridad
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https:", "http:"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      imgSrc: ["'self'", "data:", "https:", "http:"],
+      fontSrc: ["'self'", "https:", "http:", "data:"],
+      connectSrc: ["'self'", "https:", "http:"],
+      frameSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      childSrc: ["'self'"]
+    }
+  }
+}));
 
 // Configuración de CORS
 app.use(cors({
   origin: config.cors.allowedOrigins === '*' ? true : config.cors.allowedOrigins,
   credentials: true,
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
+  preflightContinue: false,
+  optionsSuccessStatus: 200
 }));
 
 // Rate limiting
@@ -49,8 +67,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Configuración específica para Swagger UI en servidores HTTP
 app.use('/api-docs', (req, res, next) => {
-  // Asegurar que las URLs no usen HTTPS cuando estamos en HTTP
-  res.setHeader('Content-Security-Policy', "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: http:");
+  // Remover CSP restrictivo para Swagger UI
+  res.removeHeader('Content-Security-Policy');
+  res.setHeader('Content-Security-Policy', "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: http: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https: http:;");
   next();
 });
 

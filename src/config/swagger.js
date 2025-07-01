@@ -276,8 +276,12 @@ const swaggerOptions = {
     showExtensions: true,
     showCommonExtensions: true,
     supportedSubmitMethods: ['get', 'post'],
-    tryItOutEnabled: true
+    tryItOutEnabled: true,
+    url: null, // Forzar que use la URL actual
+    urls: null
   },
+  customCssUrl: null, // No usar CSS externo
+  customJs: null, // No usar JS externo
   customCss: `
     .swagger-ui .topbar { display: none }
     .swagger-ui .info .title { color: #8B4513; }
