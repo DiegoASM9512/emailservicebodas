@@ -41,7 +41,11 @@ const options = {
     servers: [
       {
         url: `http://localhost:${config.port}`,
-        description: 'Desarrollo'
+        description: 'Desarrollo Local'
+      },
+      {
+        url: 'http://187.157.236.135:4000',
+        description: 'Servidor de Pruebas'
       },
       {
         url: 'https://api.rebecayenrique.com',
@@ -263,6 +267,17 @@ const options = {
 const specs = swaggerJsdoc(options);
 
 const swaggerOptions = {
+  explorer: true,
+  swaggerOptions: {
+    validatorUrl: null, // Desactivar validador HTTPS
+    displayRequestDuration: true,
+    docExpansion: 'list',
+    filter: true,
+    showExtensions: true,
+    showCommonExtensions: true,
+    supportedSubmitMethods: ['get', 'post'],
+    tryItOutEnabled: true
+  },
   customCss: `
     .swagger-ui .topbar { display: none }
     .swagger-ui .info .title { color: #8B4513; }

@@ -47,8 +47,16 @@ if (config.nodeEnv === 'development') {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Configuración específica para Swagger UI en servidores HTTP
+app.use('/api-docs', (req, res, next) => {
+  // Asegurar que las URLs no usen HTTPS cuando estamos en HTTP
+  res.setHeader('Content-Security-Policy', "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: http:");
+  next();
+});
+
 // Documentación Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerOptions));
+app.use('/api-docs', swaggerUi.serve);
+app.get('/api-docs', swaggerUi.setup(specs, swaggerOptions));
 
 // Redirección desde la raíz a la documentación
 app.get('/', (req, res) => {
