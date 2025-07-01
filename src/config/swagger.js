@@ -45,7 +45,7 @@ const options = {
       },
       {
         url: 'http://187.157.236.135:4000',
-        description: 'Servidor de Pruebas'
+        description: 'Producción'
       },
       {
         url: 'https://api.rebecayenrique.com',
