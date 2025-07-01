@@ -40,16 +40,16 @@ const options = {
     },
     servers: [
       {
+        url: 'https://cj-keyboards-radical-since.trycloudflare.com',
+        description: 'Producción HTTPS (Cloudflare Tunnel)'
+      },
+      {
         url: 'http://187.157.236.135:4000',
-        description: 'Servidor de Pruebas (Principal)'
+        description: 'Servidor HTTP (Solo para pruebas locales)'
       },
       {
         url: `http://localhost:${config.port}`,
         description: 'Desarrollo Local'
-      },
-      {
-        url: 'https://api.rebecayenrique.com',
-        description: 'Producción'
       }
     ],
     tags: [
