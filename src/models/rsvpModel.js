@@ -31,6 +31,15 @@ const rsvpValidationSchema = Joi.object({
       'string.max': 'El menú no puede exceder 50 caracteres'
     }),
 
+  // Alergias del invitado principal
+  alergias: Joi.string()
+    .max(500)
+    .allow('')
+    .default('')
+    .messages({
+      'string.max': 'La descripción de alergias no puede exceder 500 caracteres'
+    }),
+
   // Opciones booleanas
   agregarAcompañantes: Joi.boolean().default(false),
   mismoPlato: Joi.boolean().default(false),
@@ -54,18 +63,16 @@ const rsvpValidationSchema = Joi.object({
           'string.empty': 'El platillo del acompañante es requerido',
           'string.min': 'El platillo debe tener al menos 2 caracteres',
           'string.max': 'El platillo no puede exceder 50 caracteres'
+        }),
+      alergias: Joi.string()
+        .max(500)
+        .allow('')
+        .default('')
+        .messages({
+          'string.max': 'La descripción de alergias del acompañante no puede exceder 500 caracteres'
         })
     })
   ).default([]),
-
-  // Alergias (opcional)
-  alergias: Joi.string()
-    .max(500)
-    .allow('')
-    .default('')
-    .messages({
-      'string.max': 'La descripción de alergias no puede exceder 500 caracteres'
-    }),
 
   // Email del remitente (requerido para envío)
   emailRemitente: Joi.string()

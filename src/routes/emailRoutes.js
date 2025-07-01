@@ -42,7 +42,7 @@ const validationMiddleware = require('../middleware/validationMiddleware');
  *                 agregarAcompañantes: false
  *                 mismoPlato: false
  *                 acompañantes: []
- *                 alergias: ""
+ *                 alergias: "Alérgica a los frutos secos"
  *             confirmacion_con_acompañantes:
  *               summary: Confirmación con 2 acompañantes
  *               value:
@@ -50,14 +50,17 @@ const validationMiddleware = require('../middleware/validationMiddleware');
  *                 emailRemitente: "juan.perez@gmail.com"
  *                 numeroAcompañantes: "2"
  *                 menu: "pescado"
+ *                 alergias: "Alérgico a los mariscos"
  *                 agregarAcompañantes: true
  *                 mismoPlato: false
  *                 acompañantes:
  *                   - nombre: "Ana María López"
  *                     platillo: "vegetariano"
+ *                     alergias: "Alérgica a los frutos secos"
  *                   - nombre: "Carlos Roberto Díaz"
  *                     platillo: "pasta"
- *                 alergias: "Ana es alérgica a los frutos secos"
+ *                     alergias: "Intolerante a la lactosa"
+
  *             confirmacion_con_alergias:
  *               summary: Confirmación con restricciones alimentarias
  *               value:
@@ -65,12 +68,14 @@ const validationMiddleware = require('../middleware/validationMiddleware');
  *                 emailRemitente: "sofia.martinez@hotmail.com"
  *                 numeroAcompañantes: "1"
  *                 menu: "vegetariano"
+ *                 alergias: "Vegetariana estricta"
  *                 agregarAcompañantes: true
  *                 mismoPlato: false
  *                 acompañantes:
  *                   - nombre: "Miguel Ángel Torres"
  *                     platillo: "pollo"
- *                 alergias: "Sofía es vegetariana estricta y Miguel es alérgico al gluten"
+ *                     alergias: "Alérgico al gluten"
+
  *     responses:
  *       200:
  *         description: Email enviado exitosamente

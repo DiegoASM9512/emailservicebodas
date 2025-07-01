@@ -96,7 +96,13 @@ const options = {
               minLength: 2,
               maxLength: 50,
               description: 'Opción de menú seleccionada (ej: pollo, pasta, vegetariano, pescado, salmón, caldo, etc.)',
-              example: 'pollo'
+              example: 'filete de salmón'
+            },
+            alergias: {
+              type: 'string',
+              maxLength: 500,
+              description: 'Alergias o restricciones alimentarias del invitado principal',
+              example: 'Alérgica a los mariscos'
             },
             agregarAcompañantes: {
               type: 'boolean',
@@ -112,27 +118,32 @@ const options = {
             },
             acompañantes: {
               type: 'array',
-              description: 'Lista de acompañantes con sus detalles',
+              description: 'Lista de acompañantes con sus detalles (nombre, platillo y alergias)',
               items: {
                 $ref: '#/components/schemas/Acompanante'
-              },
-              example: [
-                {
-                  nombre: 'Juan Carlos González',
-                  platillo: 'salmón'
-                },
-                {
-                  nombre: 'Ana María López',
-                  platillo: 'vegetariano'
-                }
-              ]
-            },
-            alergias: {
-              type: 'string',
-              maxLength: 500,
-              description: 'Descripción de alergias o restricciones alimentarias',
-              example: 'Juan es alérgico a los mariscos y Ana es vegetariana estricta'
+              }
             }
+          },
+          example: {
+            nombre: 'María González Pérez',
+            emailRemitente: 'maria.gonzalez@gmail.com',
+            numeroAcompañantes: '2',
+            menu: 'filete de salmón',
+            alergias: 'Alérgica a los mariscos',
+            agregarAcompañantes: true,
+            mismoPlato: false,
+            acompañantes: [
+              {
+                nombre: 'Juan Carlos González',
+                platillo: 'pasta primavera',
+                alergias: 'Intolerante a la lactosa'
+              },
+              {
+                nombre: 'Ana María López',
+                platillo: 'pollo a la plancha',
+                alergias: 'Vegetariana estricta'
+              }
+            ]
           }
         },
         Acompanante: {
@@ -151,8 +162,19 @@ const options = {
               minLength: 2,
               maxLength: 50,
               description: 'Opción de menú para el acompañante (ej: pollo, pasta, vegetariano, pescado, salmón, caldo, etc.)',
-              example: 'pasta'
+              example: 'pasta primavera'
+            },
+            alergias: {
+              type: 'string',
+              maxLength: 500,
+              description: 'Alergias o restricciones alimentarias del acompañante (opcional)',
+              example: 'Intolerante a la lactosa'
             }
+          },
+          example: {
+            nombre: 'Juan Carlos González',
+            platillo: 'pasta primavera',
+            alergias: 'Intolerante a la lactosa'
           }
         },
         SuccessResponse: {

@@ -24,7 +24,7 @@ class EmailService {
     } = rsvpData;
 
     // Debug: Log de los datos recibidos en el servicio
-    console.log('🍽️ Datos del menú recibidos en servicio:', { menu, acompañantes });
+    console.log('🍽️ Datos del menú recibidos en servicio:', { menu, acompañantes, alergias });
 
     // Función para formatear nombres de platillos
     const formatearPlatillo = (platillo) => {
@@ -42,14 +42,16 @@ class EmailService {
           <div style="margin-bottom: 10px; padding: 10px; background-color: white; border-radius: 4px;">
             <strong>${index + 1}. ${acomp.nombre}</strong><br>
             <span style="color: #666;">Platillo: ${formatearPlatillo(acomp.platillo)}</span>
+            ${acomp.alergias ? `<br><span style="color: #d63384; font-size: 0.9em;">⚠️ Alergias: ${acomp.alergias}</span>` : ''}
           </div>
         `).join('')}
       </div>
     ` : '';
 
-    const alergiasHTML = alergias ? `
+    // Mostrar alergias del invitado principal si las tiene
+    const alergiasInvitadoHTML = alergias ? `
       <div style="background-color: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ffc107;">
-        <h3 style="color: #856404; margin-bottom: 10px;">⚠️ Alergias/Restricciones:</h3>
+        <h3 style="color: #856404; margin-bottom: 10px;">⚠️ Tus Alergias/Restricciones:</h3>
         <p style="color: #856404; margin: 0;">${alergias}</p>
       </div>
     ` : '';
@@ -87,7 +89,7 @@ class EmailService {
           </div>
 
           ${acompañantesHTML}
-          ${alergiasHTML}
+          ${alergiasInvitadoHTML}
         </div>
 
         <div style="background-color: #E8F5E8; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
@@ -219,17 +221,18 @@ DETALLES DE TU CONFIRMACIÓN:
 - Email: ${emailRemitente}
 - Número de acompañantes: ${numeroAcompañantes}
 - Menú seleccionado: ${formatearPlatillo(menu)}
+${alergias ? `- Tus alergias: ${alergias}` : ''}
 `;
 
     if (acompañantes.length > 0) {
       text += '\nACOMPAÑANTES:\n';
       acompañantes.forEach((acomp, index) => {
-        text += `${index + 1}. ${acomp.nombre} - ${formatearPlatillo(acomp.platillo)}\n`;
+        text += `${index + 1}. ${acomp.nombre} - ${formatearPlatillo(acomp.platillo)}`;
+        if (acomp.alergias) {
+          text += ` (Alergias: ${acomp.alergias})`;
+        }
+        text += '\n';
       });
-    }
-
-    if (alergias) {
-      text += `\nALERGIAS/RESTRICCIONES:\n${alergias}\n`;
     }
 
     text += `
@@ -278,15 +281,27 @@ Rebeca y Enrique
           <div style="margin-bottom: 8px; padding: 8px; background-color: white; border-radius: 4px; border-left: 3px solid #D4AF37;">
             <strong>${index + 1}. ${acomp.nombre}</strong><br>
             <span style="color: #666; font-size: 0.9em;">🍽️ ${formatearPlatillo(acomp.platillo)}</span>
+            ${acomp.alergias ? `<br><span style="color: #d63384; font-size: 0.85em;">⚠️ ${acomp.alergias}</span>` : ''}
           </div>
         `).join('')}
       </div>
     ` : '<p style="color: #666; font-style: italic;">🚶‍♀️ Sin acompañantes</p>';
 
-    const alergiasHTML = alergias ? `
+    // Recopilar todas las alergias (invitado principal + acompañantes)
+    const todasLasAlergias = [];
+    if (alergias) {
+      todasLasAlergias.push(`<strong>${nombre}:</strong> ${alergias}`);
+    }
+    acompañantes.forEach(acomp => {
+      if (acomp.alergias) {
+        todasLasAlergias.push(`<strong>${acomp.nombre}:</strong> ${acomp.alergias}`);
+      }
+    });
+
+    const alergiasHTML = todasLasAlergias.length > 0 ? `
       <div style="background-color: #fff3cd; padding: 12px; border-radius: 6px; margin: 15px 0; border-left: 4px solid #ffc107;">
-        <h4 style="color: #856404; margin-bottom: 8px;">⚠️ Alergias/Restricciones:</h4>
-        <p style="color: #856404; margin: 0; font-size: 0.95em;">${alergias}</p>
+        <h4 style="color: #856404; margin-bottom: 8px;">⚠️ Alergias/Restricciones Reportadas:</h4>
+        ${todasLasAlergias.map(alergia => `<p style="color: #856404; margin: 5px 0; font-size: 0.95em;">${alergia}</p>`).join('')}
       </div>
     ` : '<p style="color: #666; font-style: italic;">✅ Sin alergias reportadas</p>';
 
@@ -404,19 +419,34 @@ FECHA/HORA: ${new Date().toLocaleString('es-ES')}
 
 DETALLES DE MENÚS:
 - ${nombre}: ${formatearPlatillo(menu)}
+${alergias ? `  Alergias: ${alergias}` : ''}
 `;
 
     if (acompañantes.length > 0) {
       text += '\nACOMPAÑANTES:\n';
       acompañantes.forEach((acomp, index) => {
-        text += `${index + 1}. ${acomp.nombre}: ${formatearPlatillo(acomp.platillo)}\n`;
+        text += `${index + 1}. ${acomp.nombre}: ${formatearPlatillo(acomp.platillo)}`;
+        if (acomp.alergias) {
+          text += ` (Alergias: ${acomp.alergias})`;
+        }
+        text += '\n';
       });
     } else {
       text += '\nACOMPAÑANTES: Ninguno\n';
     }
 
-    if (alergias) {
-      text += `\nALERGIAS/RESTRICCIONES:\n${alergias}\n`;
+    // Resumen de alergias
+    const todasLasAlergias = [];
+    if (alergias) todasLasAlergias.push(`${nombre}: ${alergias}`);
+    acompañantes.forEach(acomp => {
+      if (acomp.alergias) todasLasAlergias.push(`${acomp.nombre}: ${acomp.alergias}`);
+    });
+
+    if (todasLasAlergias.length > 0) {
+      text += '\nRESUMEN DE ALERGIAS/RESTRICCIONES:\n';
+      todasLasAlergias.forEach(alergia => {
+        text += `- ${alergia}\n`;
+      });
     } else {
       text += '\nALERGIAS/RESTRICCIONES: Ninguna reportada\n';
     }
